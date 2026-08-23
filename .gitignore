@@ -1,0 +1,25 @@
+# Dependências instaladas localmente.
+node_modules/
+
+# Arquivos compilados.
+dist/
+
+# Variáveis de ambiente e informações sensíveis.
+.env
+.env.*
+!.env.example
+
+# Arquivos gerados pelo Prisma.
+src/generated/prisma/
+
+# Banco de dados SQLite local.
+*.db
+*.db-journal
+
+# Configurações locais de ferramentas de desenvolvimento.
+.agents/
+.claude/
+.windsurf/
+
+# Arquivos locais de ferramentas do ambiente.
+skills-lock.json
