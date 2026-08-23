@@ -1,5 +1,5 @@
 // Importações.
-import { email, z } from "zod";
+import { z } from "zod";
 
 // Define os campos obrigatórios e as regras para criação de um novo usuário.
 const registerSchema = z.object({
@@ -14,8 +14,8 @@ const registerSchema = z.object({
 
     password: z
         .string()
-        .min(8, "Password must be at least 8 characters long.")
-});
+        .min(6, "Password must be at least 6 characters long.")
+}).strict();
 
 // Validação do login.
 // Define os campos necessários para autenticar um usuário.
@@ -27,7 +27,7 @@ const loginSchema = z.object({
     password: z
         .string()
         .min(1, "Password is required.")
-});
+}).strict();
 
 // Tipagem.
 // Gera o tipo TypeScript utilizado durante a autenticação.

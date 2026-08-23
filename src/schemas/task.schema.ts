@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 // Criação de tarefa.
-// Define os dados aceitos ao criar uma nova tarefa.
+// Define exclusivamente os dados aceitos para criar uma nova tarefa.
 const createTaskSchema = z.object({
     title: z
         .string()
@@ -13,10 +13,10 @@ const createTaskSchema = z.object({
         .string()
         .trim()
         .optional()
-});
+}).strict();
 
 // Atualização de tarefa.
-// Permite alterar somente os campos definidos pelo desafio.
+// Permite alterar somente os campos definidos pelo contrato da API.
 const updateTaskSchema = z.object({
     title: z
         .string()
@@ -32,7 +32,7 @@ const updateTaskSchema = z.object({
     done: z
         .boolean()
         .optional()
-}).refine(
+}).strict().refine(
     (data) => Object.keys(data).length > 0,
     {
         message: "At least one field must be provided."

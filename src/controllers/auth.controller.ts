@@ -1,56 +1,29 @@
 // Importações.
 import { Request, Response } from "express";
-
-import {
-    loginSchema,
-    registerSchema
-} from "../schemas/auth.schema.js";
 import { authService } from "../services/auth.service.js";
 
+// Controller de autenticação.
+// Converte as requisições HTTP em chamadas para as regras de negócio de autenticação.
 class AuthController {
 
     // Registro de usuário.
-    // Valida os dados recebidos antes de encaminhá-los para a regra de negócio.
+    // Recebe dados previamente validados e solicita a criação do usuário.
     async register(request: Request, response: Response) {
-        const validationResult = registerSchema.safeParse(request.body);
-
-        if (!validationResult.success) {
-            return response.status(400).json({
-                error: {
-                    message: "Invalid registration data.",
-                    details: validationResult.error.issues
-                }
-            });
-        }
-
-        const user = await authService.register(validationResult.data);
+        const user = await authService.register(request.body);
 
         return response.status(201).json(user);
     }
 
     // Login de usuário.
-    // Valida as credenciais recebidas antes de encaminhá-las para o serviço de autenticação.
+    // Recebe credenciais previamente validadas e retorna os dados de autenticação.
     async login(request: Request, response: Response) {
-        const validationResult = loginSchema.safeParse(request.body);
+        const authenticationResult = await authService.login(request.body);
 
-        if (!validationResult.success) {
-            return response.status(400).json({
-                error: {
-                    message: "Invalid login data.",
-                    details: validationResult.error.issues
-                }
-            });
-        }
-
-        const authentication = await authService.login(
-            validationResult.data
-        );
-
-        return response.status(200).json(authentication);
+        return response.status(200).json(authenticationResult);
     }
 }
 
-// Disponibiliza uma única instância do controller para as rotas.
+// Disponibiliza uma única instância do controller para as rotas de autenticação.
 const authController: AuthController = new AuthController();
 
 // Exportação.

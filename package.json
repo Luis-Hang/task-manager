@@ -5,8 +5,11 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy"
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "prisma": "^7.9.1",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   },
   "dependencies": {

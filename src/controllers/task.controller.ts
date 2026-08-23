@@ -1,11 +1,6 @@
 // Importações.
 import { Request, Response } from "express";
-
 import { AppError } from "../errors/app.error.js";
-import {
-    createTaskSchema,
-    updateTaskSchema
-} from "../schemas/task.schema.js";
 import { taskService } from "../services/task.service.js";
 
 // Controller de tarefas.
@@ -13,19 +8,8 @@ import { taskService } from "../services/task.service.js";
 class TaskController {
 
     // Criação de tarefa.
-    // Valida os dados e vincula a nova tarefa ao usuário identificado pelo token.
+    // Recebe dados já validados pelo middleware e vincula a tarefa ao usuário autenticado.
     async create(request: Request, response: Response) {
-        const validationResult = createTaskSchema.safeParse(request.body);
-
-        if (!validationResult.success) {
-            return response.status(400).json({
-                error: {
-                    message: "Invalid task data.",
-                    details: validationResult.error.issues
-                }
-            });
-        }
-
         const userId: number | undefined = request.userId;
 
         if (!userId) {
@@ -34,7 +18,7 @@ class TaskController {
 
         const task = await taskService.create(
             userId,
-            validationResult.data
+            request.body
         );
 
         return response.status(201).json(task);
@@ -64,17 +48,12 @@ class TaskController {
             throw new AppError("Authentication required.", 401);
         }
 
-        if (!Number.isInteger(taskId) || taskId <= 0) {
-            throw new AppError("Invalid task ID.", 400);
-        }
-
         const task = await taskService.findById(taskId, userId);
-
         return response.status(200).json(task);
     }
 
     // Atualização de tarefa.
-    // Valida os campos permitidos e garante que a operação use o usuário autenticado.
+    // Recebe somente campos previamente validados antes de atualizar a tarefa.
     async update(request: Request, response: Response) {
         const taskId: number = Number(request.params.id);
         const userId: number | undefined = request.userId;
@@ -83,25 +62,10 @@ class TaskController {
             throw new AppError("Authentication required.", 401);
         }
 
-        if (!Number.isInteger(taskId) || taskId <= 0) {
-            throw new AppError("Invalid task ID.", 400);
-        }
-
-        const validationResult = updateTaskSchema.safeParse(request.body);
-
-        if (!validationResult.success) {
-            return response.status(400).json({
-                error: {
-                    message: "Invalid task update data.",
-                    details: validationResult.error.issues
-                }
-            });
-        }
-
         const task = await taskService.update(
             taskId,
             userId,
-            validationResult.data
+            request.body
         );
 
         return response.status(200).json(task);
@@ -117,18 +81,13 @@ class TaskController {
             throw new AppError("Authentication required.", 401);
         }
 
-        if (!Number.isInteger(taskId) || taskId <= 0) {
-            throw new AppError("Invalid task ID.", 400);
-        }
-
         await taskService.delete(taskId, userId);
-
         return response.status(204).send();
     }
 }
 
-// Exportação.
 // Disponibiliza uma única instância do controller para as rotas de tarefas.
 const taskController: TaskController = new TaskController();
 
+// Exportação.
 export { taskController };
