@@ -86,6 +86,7 @@ Crie um arquivo `.env` na raiz do projeto com base no `.env.example`:
 ```env
 DATABASE_URL="file:./prisma/dev.db"
 JWT_SECRET="substitua_por_uma_chave_secreta_segura"
+PORT=3000
 ```
 
 ## Banco de dados
@@ -157,8 +158,8 @@ Body:
 
 ```json
 {
-  "name": "Luis",
-  "email": "luis@example.com",
+  "name": "Nome",
+  "email": "nome@example.com",
   "password": "123456"
 }
 ```
@@ -168,8 +169,8 @@ Resposta de sucesso:
 ```json
 {
   "id": 1,
-  "name": "Luis",
-  "email": "luis@example.com",
+  "name": "Nome",
+  "email": "nome@example.com",
   "createdAt": "2026-08-23T13:50:17.124Z"
 }
 ```
@@ -182,7 +183,7 @@ Body:
 
 ```json
 {
-  "email": "luis@example.com",
+  "email": "nome@example.com",
   "password": "123456"
 }
 ```
@@ -194,8 +195,8 @@ Resposta de sucesso:
   "token": "JWT_TOKEN",
   "user": {
     "id": 1,
-    "name": "Luis Hang",
-    "email": "luis@example.com"
+    "name": "Nome",
+    "email": "nome@example.com"
   }
 }
 ```
@@ -220,8 +221,8 @@ Body:
 
 ```json
 {
-  "title": "Finalizar o projeto",
-  "description": "Implementar a API Task Manager"
+  "title": "Tarefa",
+  "description": "Descrição da tarefa."
 }
 ```
 
@@ -286,17 +287,3 @@ A API implementa as seguintes medidas de segurança:
 ## Licença
 
 Este projeto foi desenvolvido para fins de estudo e avaliação técnica.
-
-````
-
-Depois de criar o arquivo, execute:
-
-```bash
-npm run build
-````
-
-e:
-
-```bash
-git status
-```
